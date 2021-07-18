@@ -12,7 +12,7 @@ endpoint("basics", "help", (req, write) => {
     for (const category of Object.values(endpoints)) {
         const categoryEndpoints = {};
         for (const endpoint of Object.values(endpoints[category.name])) {
-            if (!("execute" in endpoint)) continue;
+            if (typeof endpoint === "string") continue;
             categoryEndpoints[endpoint.name] = endpoint.description;
         }
 
