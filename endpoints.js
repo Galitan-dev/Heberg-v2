@@ -4,7 +4,7 @@ const endpoints = {}
 endpoint("basics", "notfound", (req, write) => {
     write("code", 404);
     write("message", "Not Found");
-});
+}, "Not found");
 
 endpoint("basics", "help", (req, write) => {
     write("code", 200);
@@ -19,7 +19,7 @@ endpoint("basics", "help", (req, write) => {
         endpointsData[category.name] = categoryEndpoints;
     }
     write("endpoints", endpointsData);
-});
+}, "List endpoints");
 
 module.exports = endpoints;
 
