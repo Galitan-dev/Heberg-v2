@@ -12,7 +12,7 @@ const io = new socketIo.Server(server); //TODO: implement sockets interaction
 
 app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "js", "css" ] }));
 
-app.get("/api/:category/:endpoint", (req, res) => {
+app.get("/api/:category/:endpoint", async (req, res) => {
     const category = req.params.category;
     const endpoint = req.params.endpoint;
 
