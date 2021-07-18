@@ -9,9 +9,9 @@ endpoint("basics", "notfound", (req, write) => {
 endpoint("basics", "help", (req, write) => {
     write("code", 200);
     const endpointsData = {};
-    for (const category of endpoints) {
+    for (const category of Object.values(endpoints)) {
         const categoryEndpoints = {};
-        for (const endpoint of endpoints[category]) {
+        for (const endpoint of Object.values(endpoints[category])) {
             categoryEndpoints[endpoint.name] = endpoint.description;
         }
 
