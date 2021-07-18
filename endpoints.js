@@ -21,6 +21,13 @@ endpoint("basics", "help", (req, write) => {
     write("endpoints", endpointsData);
 }, "List endpoints");
 
+endpoint("basics", "status", (req, write) => {
+    write("code", 200);
+    write("api", "ALIVE");
+    write("socketio", "DEAD");
+    write("mongodb", "DEAD");
+});
+
 module.exports = endpoints;
 
 /**
