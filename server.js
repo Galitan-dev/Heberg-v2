@@ -12,18 +12,9 @@ const io = socketIo(server); //TODO: implement sockets interaction
 
 app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "js", "css" ] }));
 
-app.get("/api/help", (req, res) => {
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    const data = {}
-
-    /** @type {import('./endpoints').writeFunc} */
-    const write = (key, value) => data[key] = value;
-    
-});
-
-app.get("/api/:category/:command", (req, res) => {
+app.get("/api/:category/:endpoint", (req, res) => {
     const category = req.params.category;
-    const command = req.params.command;
+    const endpoint = req.params.endpoint;
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     const data = {}
@@ -31,8 +22,8 @@ app.get("/api/:category/:command", (req, res) => {
     /** @type {import('./endpoints').writeFunc} */
     const write = (key, value) => data[key] = value;
 
-    if (category in endpoints) endpoints[category](req, command, write);
-    else endpoints.notfound(req, command, write);
+    if (category in endpoints && endpoint in endpoints[category]) endpoints[category][endpoint].execute(req, write);
+    else endpoints.basics.notfound.execute(req, write);
 
     write("date", Date.now());
 
