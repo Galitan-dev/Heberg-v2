@@ -29,7 +29,7 @@ endpoint("basics", "status", async (req, write) => {
     const api = true;
 
     const socketIo = await new Promise(resolve => {
-        http.get(`https://127.0.0.1:${process.env.PORT || 200}/socket.io/socket.io.js`, res => {
+        http.get(`http://127.0.0.1:${process.env.PORT || 200}/socket.io/socket.io.js`, res => {
             resolve(res.statusCode == 200);
         });
     });
