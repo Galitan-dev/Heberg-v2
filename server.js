@@ -16,14 +16,17 @@ app.get("/api/:category/:endpoint", (req, res) => {
     const category = req.params.category;
     const endpoint = req.params.endpoint;
 
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    const data = {}
+    const data = {
+        code: 500
+    }
 
     /** @type {import('./endpoints').writeFunc} */
     const write = (key, value) => data[key] = value;
 
     if (category in endpoints && endpoint in endpoints[category]) endpoints[category][endpoint].execute(req, write);
     else endpoints.basics.notfound.execute(req, write);
+
+    res.writeHead(data.code, { 'Content-Type': 'application/json' });
 
     write("date", new Date());
 
