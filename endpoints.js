@@ -1,12 +1,14 @@
+const http = require('http');
+
 /** @type {{[key: string]: category}} */
 const endpoints = {}
 
-endpoint("basics", "notfound", (req, write) => {
+endpoint("basics", "notfound", async (req, write) => {
     write("code", 404);
     write("message", "Not Found");
 }, "Not found");
 
-endpoint("basics", "help", (req, write) => {
+endpoint("basics", "help", async (req, write) => {
     write("code", 200);
     const endpointsData = {};
     for (const category of Object.values(endpoints)) {
@@ -21,11 +23,22 @@ endpoint("basics", "help", (req, write) => {
     write("endpoints", endpointsData);
 }, "List endpoints");
 
-endpoint("basics", "status", (req, write) => {
+endpoint("basics", "status", async (req, write) => {
     write("code", 200);
-    write("api", "ALIVE");
-    write("socketio", "DEAD");
-    write("mongodb", "DEAD");
+
+    const api = true;
+
+    const socketIo = await new Promise(resolve => {
+        http.get(`https://127.0.0.1:${process.env.PORT || 200}/socket.io/socket.io.js`, res => {
+            resolve(res.statusCode == 200);
+        });
+    });
+
+    const mongodb = false;
+
+    write("api", api ? "OK" : "DEAD");
+    write("socketio", socketIo ? "OK" : "DEAD");
+    write("mongodb", mongodb ? "OK" : "DEAD");
 });
 
 module.exports = endpoints;

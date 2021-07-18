@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 200;
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server); //TODO: implement sockets interaction
+const io = new socketIo.Server(server); //TODO: implement sockets interaction
 
 app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "js", "css" ] }));
 
@@ -23,8 +23,8 @@ app.get("/api/:category/:endpoint", (req, res) => {
     /** @type {import('./endpoints').writeFunc} */
     const write = (key, value) => data[key] = value;
 
-    if (category in endpoints && endpoint in endpoints[category]) endpoints[category][endpoint].execute(req, write);
-    else endpoints.basics.notfound.execute(req, write);
+    if (category in endpoints && endpoint in endpoints[category]) await endpoints[category][endpoint].execute(req, write);
+    else await endpoints.basics.notfound.execute(req, write);
 
     res.writeHead(data.code, { 'Content-Type': 'application/json' });
 
