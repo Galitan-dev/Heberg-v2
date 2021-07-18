@@ -11,7 +11,8 @@ endpoint("basics", "help", (req, write) => {
     const endpointsData = {};
     for (const category of Object.values(endpoints)) {
         const categoryEndpoints = {};
-        for (const endpoint of Object.values(endpoints[category])) {
+        for (const endpoint of Object.values(endpoints[category.name])) {
+            if (!("execute" in endpoint)) continue;
             categoryEndpoints[endpoint.name] = endpoint.description;
         }
 
