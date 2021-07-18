@@ -25,7 +25,7 @@ app.get("/api/:category/:endpoint", (req, res) => {
     if (category in endpoints && endpoint in endpoints[category]) endpoints[category][endpoint].execute(req, write);
     else endpoints.basics.notfound.execute(req, write);
 
-    write("date", Date.now());
+    write("date", new Date());
 
     res.write(JSON.stringify(data));
     res.end();
