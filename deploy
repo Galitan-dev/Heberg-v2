@@ -5,8 +5,9 @@ echo "Killing old process"
 sudo kill $(sudo lsof -t -i:4000)
 echo "Killed!"
 echo "Cleaning old logs"
-rm nohup.out
+rm heberg/out.log
 echo "Clean"
 echo "Launching new process"
-nohup bash heberg/deploy.sh > heberg/out.log &
+nohup bash heberg/deploy.sh > heberg/out.log --silent &
 echo "Launched"
+echo "To access the logs, run heberg/logs"

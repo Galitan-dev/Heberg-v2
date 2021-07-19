@@ -1,7 +1,10 @@
 const http = require('http');
+const mongoose = require('mongoose');
+const sslChecker = require('ssl-checker');
 
 /** @type {{[key: string]: category}} */
-const endpoints = {}
+const endpoints = {};
+const db = mongoose.connection;
 
 endpoint("basics", "notfound", async (req, write) => {
     write("code", 404);
@@ -34,11 +37,28 @@ endpoint("basics", "status", async (req, write) => {
         });
     });
 
-    const mongodb = false;
+    const mongodb = db.readyState == 1;
+
+    const interface = await new Promise(resolve => {
+        http.get(`http://127.0.0.1:${process.env.PORT || 200}/testfile.txt`, res => {
+            resolve(res.statusCode == 200);
+        });
+    });
+
+    const domain = await new Promise(resolve => {
+        http.get(`http://vps.galitan.tk/testfile.txt`, res => {
+            resolve(res.statusCode == 200);
+        });
+    });
+
+    const ssl = (await sslChecker("vps.galitan.tk")).valid;
 
     write("api", api ? "OK" : "DEAD");
     write("socketio", socketIo ? "OK" : "DEAD");
     write("mongodb", mongodb ? "OK" : "DEAD");
+    write("interface", interface ? "OK" : "DEAD");
+    write("domain", domain ? "OK" : "DEAD");
+    write("ssl", ssl ? "OK" : "DEAD");
 });
 
 module.exports = endpoints;

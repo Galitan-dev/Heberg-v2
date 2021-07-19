@@ -5,8 +5,8 @@ echo From $(whoami)
 
 echo $(which node)
 echo Using node $(node -v)
-echo Using npm $(/home/ethan/.nvm/versions/node/v14.17.0/bin/npm -v)
-echo Using yarn $(/home/ethan/.nvm/versions/node/v14.17.0/bin/yarn -v)
+echo Using npm $(npm -v)
+echo Using yarn $(yarn -v)
 
 echo "Cleaning old code..."
 rm -rf ~/heberg/app
@@ -18,7 +18,7 @@ echo "Downloaded!"
 
 echo "Installing dependencies..."
 cd ~/heberg/app
-/home/ethan/.nvm/versions/node/v14.17.0/bin/yarn install --production
+yarn install --production
 echo "Installed!"
 
 echo "Preparing environment"
@@ -33,4 +33,4 @@ export MONGO_URI="mongodb://localhost:27017"
 
 echo "Done!"
 echo "Launching server..."
-/home/ethan/.nvm/versions/node/v14.17.0/bin/node ~/heberg/app/server.js
+node ~/heberg/app/server.js
