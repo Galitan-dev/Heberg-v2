@@ -34,7 +34,7 @@ app.get("/api/:category/:endpoint", async (req, res) => {
     const username = req.headers.username;
     const password = req.headers.password;
 
-    const user = await User.findOne({ username: username, password: password }, "permissions").exec();
+    const user = await User.findOne({ name: username, password: password }).exec();
 
     if (!user || (!user.permissions.includes["*"] && !user.permissions.includes(`${category}.${endpoint}`))) {
         res.writeHead(401, { 'Content-Type': 'application/json' });
