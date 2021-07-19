@@ -17,10 +17,10 @@ console.log("Connecting to Mongo database...");
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }); 
 const db = mongoose.connection;
 
-db.on('error', console.error.bind(console, "Mongoose error:"));
+db.on('error', console.error.bind(console, "MongoDB connection error:"));
 db.once('open', async () => {
     console.log("Connected!");
-    console.log(await db.collection("users").find());
+    console.log(await User.findOne().exec())
 });
 
 app.use((req, res, next) => {
