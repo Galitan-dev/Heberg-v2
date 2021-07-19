@@ -20,8 +20,6 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, "MongoDB connection error:"));
 db.once('open', async () => {
     console.log("Connected!");
-    await User.create({ name: "admin", permissions: ["*"], password: "L3ae3RCZKZg5C#MU", access: ["*"] });
-    console.log(await User.findOne().exec());
 });
 
 app.use((req, res, next) => {
