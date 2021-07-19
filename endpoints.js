@@ -33,7 +33,7 @@ endpoint("basics", "status", async (req, write) => {
     const api = true;
 
     const socketIo = await new Promise(resolve => {
-        http.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD", protocol: "http:" }, res => {
+        http.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
             resolve(res.statusCode == 200);
         }).on('error', err => {
             console.log(err);
@@ -44,7 +44,7 @@ endpoint("basics", "status", async (req, write) => {
     const mongodb = db.readyState == 1;
 
     const interface = await new Promise(resolve => {
-        http.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD", protocol: "http:" }, res => {
+        http.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
             resolve(res.statusCode == 200);
         }).on('error', err => {
             console.log(err);
