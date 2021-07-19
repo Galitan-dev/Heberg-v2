@@ -53,7 +53,7 @@ endpoint("basics", "status", async (req, write) => {
     });
 
     const domain = await new Promise(resolve => {
-        https.request({ hostname: "vps.galitan.tk", path: "/testfile.txt", method: "HEAD", protocol: "https:" }, res => {
+        https.get({ hostname: "vps.galitan.tk", path: "/testfile.txt" }, res => {
             console.log(res.statusCode, res.statusMessage)
             resolve(res.statusCode == 200);
         }).on('error', err => {
