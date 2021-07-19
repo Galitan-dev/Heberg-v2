@@ -32,8 +32,6 @@ endpoint("basics", "status", async (req, write) => {
 
     const api = true;
 
-    console.countReset("Status");
-
     console.count("Status");
     const socketIo = await new Promise(resolve => {
         http.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
