@@ -34,6 +34,9 @@ endpoint("basics", "status", async (req, write) => {
     const socketIo = await new Promise(resolve => {
         https.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
             resolve(res.statusCode == 200);
+        }).on('error', err => {
+            console.log(err);
+            resolve(false);
         });
     });
 
@@ -42,6 +45,9 @@ endpoint("basics", "status", async (req, write) => {
     const interface = await new Promise(resolve => {
         https.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
             resolve(res.statusCode == 200);
+        }).on('error', err => {
+            console.log(err);
+            resolve(false);
         });
     });
 
@@ -49,6 +55,9 @@ endpoint("basics", "status", async (req, write) => {
         https.request({ hostname: "vps.galitan.tk", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
             console.log(res.statusCode, res.statusMessage)
             resolve(res.statusCode == 200);
+        }).on('error', err => {
+            console.log(err);
+            resolve(false);
         });
     });
 
