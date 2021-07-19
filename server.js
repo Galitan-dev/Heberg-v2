@@ -20,6 +20,7 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, "Mongoose error:"));
 db.once('open', () => {
     console.log("Connected!");
+    console.log(await db.collection("users").find().exec());
 });
 
 app.use((req, res, next) => {
