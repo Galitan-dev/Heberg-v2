@@ -1,4 +1,4 @@
-const http = require('http');
+const https = require('https');
 const mongoose = require('mongoose');
 const sslChecker = require('ssl-checker');
 
@@ -32,7 +32,7 @@ endpoint("basics", "status", async (req, write) => {
     const api = true;
 
     const socketIo = await new Promise(resolve => {
-        http.get(`http://127.0.0.1:${process.env.PORT || 200}/socket.io/socket.io.js`, res => {
+        https.get(`https://127.0.0.1:${process.env.PORT || 200}/socket.io/socket.io.js`, res => {
             resolve(res.statusCode == 200);
         });
     });
@@ -40,13 +40,13 @@ endpoint("basics", "status", async (req, write) => {
     const mongodb = db.readyState == 1;
 
     const interface = await new Promise(resolve => {
-        http.get(`http://127.0.0.1:${process.env.PORT || 200}/testfile.txt`, res => {
+        https.request(`http://127.0.0.1:${process.env.PORT || 200}/testfile.txt`, { method: "HEAD" }, res => {
             resolve(res.statusCode == 200);
         });
     });
 
     const domain = await new Promise(resolve => {
-        http.get(`http://vps.galitan.tk/testfile.txt`, res => {
+        https.request(`https://vps.galitan.tk/testfile.txt`, { method: "HEAD" }, res => {
             console.log(res.statusCode, res.statusMessage)
             resolve(res.statusCode == 200);
         });
