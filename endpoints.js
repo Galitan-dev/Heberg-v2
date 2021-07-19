@@ -41,7 +41,7 @@ endpoint("basics", "status", async (req, write) => {
         });
     });
 
-    const mongodb = [ "DISCONECTED", "CONNECTED", "CONNECTING", "DISCONNECTING" ][db.readyState];
+    const mongodb = mongoose.ConnectionStates[db.readyState].toUpperCase();
 
     const interface = await new Promise(resolve => {
         http.get({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt" }, res => {
@@ -70,6 +70,7 @@ endpoint("basics", "status", async (req, write) => {
     write("domain", domain);
     write("ssl", ssl);
 }, "Get service status");
+
 
 module.exports = endpoints;
 

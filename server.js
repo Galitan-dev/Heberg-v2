@@ -2,8 +2,10 @@ const express = require('express');
 const path = require('path');
 const socketIo = require('socket.io');
 const http = require('http');
-const endpoints = require('./endpoints');
 const mongoose = require('mongoose');
+
+const endpoints = require('./endpoints');
+const { User } = require('./models');
 
 const PORT = process.env.PORT || 200;
 
@@ -29,6 +31,21 @@ app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "
 app.get("/api/:category/:endpoint", async (req, res) => {
     const category = req.params.category;
     const endpoint = req.params.endpoint;
+    const username = req.headers.username;
+    const password = req.headers.password;
+
+    const user = await User.findOne({ username: username, password: password }, "permissions").exec();
+
+    if (!user || (!user.permissions.includes["*"] && !user.permissions.includes(`${category}.${endpoint}`))) {
+        res.writeHead(401, { 'Content-Type': 'application/json' });
+        const data = {
+            code: 401,
+            message: "Unauthorized"
+        }
+        res.write(JSON.stringify(data));
+        res.end();
+        return;
+    }
 
     const data = {
         code: 500

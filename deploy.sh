@@ -29,7 +29,7 @@ export PORT=4000
 
 echo "Injecting MONGO_URI"
 unset MONGO_URI
-export MONGO_URI="mongodb://localhost:27017"
+export MONGO_URI="mongodb://localhost:27017/heberg"
 
 echo "Done!"
 echo "Launching server..."
