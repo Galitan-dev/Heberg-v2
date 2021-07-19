@@ -38,7 +38,7 @@ app.get("/api/:category/:endpoint", async (req, res) => {
 
     console.log(user);
 
-    if (!user || (!user.permissions.includes["*"] && !user.permissions.includes(`${category}.${endpoint}`))) {
+    if (!user || !user.permissions.includes("*")) {
         res.writeHead(401, { 'Content-Type': 'application/json' });
         const data = {
             code: 401,
