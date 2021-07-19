@@ -12,7 +12,7 @@ const server = http.createServer(app);
 const io = new socketIo.Server(server); //TODO: implement sockets interaction
 
 console.log("Connecting to Mongo database...");
-mongoose.connect(process.env.MONGO_URI); 
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useOldUrlParser: true }); 
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, "Mongoose error:"));
