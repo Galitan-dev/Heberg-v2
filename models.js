@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 module.exports = {
-    User: model("User", { name: String, permissions: [String], password: String, access: [String] });
+    User: model("User", { name: String, permissions: [String], password: String, access: [String] })
 };
 
 /**
