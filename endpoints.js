@@ -32,7 +32,7 @@ endpoint("basics", "status", async (req, write) => {
     const api = true;
 
     const socketIo = await new Promise(resolve => {
-        https.request(`https://127.0.0.1:${process.env.PORT || 200}/socket.io/socket.io.js`, { method: "HEAD" }, res => {
+        https.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
             resolve(res.statusCode == 200);
         });
     });
@@ -40,13 +40,13 @@ endpoint("basics", "status", async (req, write) => {
     const mongodb = db.readyState == 1;
 
     const interface = await new Promise(resolve => {
-        https.request(`http://127.0.0.1:${process.env.PORT || 200}/testfile.txt`, { method: "HEAD" }, res => {
+        https.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
             resolve(res.statusCode == 200);
         });
     });
 
     const domain = await new Promise(resolve => {
-        https.request(`https://vps.galitan.tk/testfile.txt`, { method: "HEAD" }, res => {
+        https.request({ hostname: "vps.galitan.tk", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
             console.log(res.statusCode, res.statusMessage)
             resolve(res.statusCode == 200);
         });
