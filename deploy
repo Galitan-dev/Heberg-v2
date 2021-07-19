@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cd ~
+echo "Killing old process"
+sudo kill $(sudo lsof -t -i:4000)
+echo "Killed!"
+echo "Cleaning old logs"
+rm nohup.out
+echo "Clean"
+echo "Launching new process"
+nohup bash heberg/deploy.sh > heberg/out.log &
+echo "Launched"
