@@ -47,6 +47,7 @@ endpoint("basics", "status", async (req, write) => {
 
     const domain = await new Promise(resolve => {
         http.get(`http://vps.galitan.tk/testfile.txt`, res => {
+            console.log(res.statusCode, res.statusMessage)
             resolve(res.statusCode == 200);
         });
     });
