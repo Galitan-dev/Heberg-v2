@@ -41,7 +41,7 @@ endpoint("basics", "status", async (req, write) => {
         });
     });
 
-    const mongodb = [ "DISCONECTED", "CONNECTING", "CONNECTED", "DISCONNECTING" ][db.readyState];
+    const mongodb = [ "DISCONECTED", "CONNECTED", "CONNECTING", "DISCONNECTING" ][db.readyState];
 
     const interface = await new Promise(resolve => {
         http.get({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt" }, res => {
