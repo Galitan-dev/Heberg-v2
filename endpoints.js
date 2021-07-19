@@ -32,6 +32,9 @@ endpoint("basics", "status", async (req, write) => {
 
     const api = true;
 
+    console.countReset("Status");
+
+    console.count("Status");
     const socketIo = await new Promise(resolve => {
         http.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
             resolve(res.statusCode == 200);
@@ -41,8 +44,10 @@ endpoint("basics", "status", async (req, write) => {
         });
     });
 
+    console.count("Status");
     const mongodb = db.readyState == 1;
 
+    console.count("Status");
     const interface = await new Promise(resolve => {
         http.request({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt", method: "HEAD" }, res => {
             resolve(res.statusCode == 200);
@@ -52,6 +57,7 @@ endpoint("basics", "status", async (req, write) => {
         });
     });
 
+    console.count("Status");
     const domain = await new Promise(resolve => {
         https.request({ hostname: "vps.galitan.tk", path: "/testfile.txt", method: "HEAD", protocol: "https:" }, res => {
             console.log(res.statusCode, res.statusMessage)
@@ -62,8 +68,10 @@ endpoint("basics", "status", async (req, write) => {
         });
     });
 
+    console.count("Status");
     const ssl = (await sslChecker("vps.galitan.tk")).valid;
 
+    console.count("Status");
     write("api", api ? "OK" : "DEAD");
     write("socketio", socketIo ? "OK" : "DEAD");
     write("mongodb", mongodb ? "OK" : "DEAD");
