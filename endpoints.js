@@ -30,46 +30,45 @@ endpoint("basics", "help", async (req, write) => {
 endpoint("basics", "status", async (req, write) => {
     write("code", 200);
 
-    const api = true;
+    const api = "OK";
 
     const socketIo = await new Promise(resolve => {
         http.get({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt" }, res => {
-            resolve(res.statusCode == 200);
+            resolve(res.statusMessage);
         }).on('error', err => {
             console.log(err);
-            resolve(false);
+            resolve("Unjoinable");
         });
     });
 
-    const mongodb = db.readyState == 1;
+    const mongodb = [ "DISCONECTED", "CONNECTING", "CONNECTED", "DISCONNECTING" ][db.readyState];
 
     const interface = await new Promise(resolve => {
         http.get({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt" }, res => {
-            resolve(res.statusCode == 200);
+            resolve(res.statusMessage);
         }).on('error', err => {
             console.log(err);
-            resolve(false);
+            resolve("Unjoinable");
         });
     });
 
     const domain = await new Promise(resolve => {
         https.get({ hostname: "vps.galitan.tk", path: "/testfile.txt" }, res => {
-            console.log(res.statusCode, res.statusMessage)
-            resolve(res.statusCode == 200);
+            resolve(res.statusMessage);
         }).on('error', err => {
             console.log(err);
-            resolve(false);
+            resolve("Unjoinable");
         });
     });
 
-    const ssl = (await sslChecker("vps.galitan.tk")).valid;
+    const ssl = (await sslChecker("vps.galitan.tk")).valid ? "VALID" : "INVALID";
 
-    write("api", api ? "OK" : "DEAD");
-    write("socketio", socketIo ? "OK" : "DEAD");
-    write("mongodb", mongodb ? "OK" : "DEAD");
-    write("interface", interface ? "OK" : "DEAD");
-    write("domain", domain ? "OK" : "DEAD");
-    write("ssl", ssl ? "OK" : "DEAD");
+    write("api", api);
+    write("socketio", socketIo);
+    write("mongodb", mongodb);
+    write("interface", interface);
+    write("domain", domain);
+    write("ssl", ssl);
 }, "Get service status");
 
 module.exports = endpoints;
