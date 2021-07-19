@@ -2,13 +2,23 @@ const express = require('express');
 const path = require('path');
 const socketIo = require('socket.io');
 const http = require('http');
-const endpoints = require('./endpoints')
+const endpoints = require('./endpoints');
+const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 200;
 
 const app = express();
 const server = http.createServer(app);
 const io = new socketIo.Server(server); //TODO: implement sockets interaction
+
+console.log("Connecting to Mongo database...");
+mongoose.connect(process.env.MONGO_URI); 
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, "Mongoose error:"));
+db.once('open', () => {
+    console.log("Connected!");
+});
 
 app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "js", "css" ] }));
 

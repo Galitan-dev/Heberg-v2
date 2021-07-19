@@ -14,9 +14,14 @@ cd ~/heberg/app
 echo "Installed!"
 
 echo "Preparing environment"
+
 echo "Injecting PORT"
 unset port
 export PORT=4000
+
+echo "Injecting MONGO_URI"
+unset MONGO_URI
+export MONGO_URI="mongodb://localhost:27017"
 
 echo "Done!"
 echo "Launching server..."
