@@ -24,6 +24,16 @@ db.once('open', async () => {
 
 app.use((req, res, next) => {
     console.log(req.method, req.url);
+
+    const authorization = req.headers.authorization;
+    const authorizationType = authorization?.split(" ");
+
+    let username, password;
+    if (authorizationType == "Basic") [ username, password ] = 
+        Buffer.from(authorization.split(" "), "base64").toString().split(":");
+    
+    req.user = User.find(username, password);
+
     next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "js", "css" ] }));
@@ -31,25 +41,10 @@ app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "
 app.get("/api/:category/:endpoint", async (req, res) => {
     const category = req.params.category;
     const endpoint = req.params.endpoint;
-    const authorization = req.headers.authorization;
-    const authorizationType = authorization?.split(" ");
+    /** @type {User} */
+    const user = req.user;
 
-    let username, password;
-    if (authorizationType == "Basic") [ username, password ] = 
-        Buffer.from(authorization.split(" "), "base64").toString().split(":");
-
-    const user = !!username && !!password ? await User.findOne({ name: username, password: password }).exec() : undefined;
-
-    if (!!user) 
-        console.log(user.name, user.permissions);
-
-    const hasPermission = [ "basics", "user" ].includes(category) || (!!user && (
-        user.permissions.includes("*") ||
-        user.permissions.includes(category + ".*") ||
-        user.permissions.includes(category + "." + endpoint)
-    ));
-    
-    if (!hasPermission) {
+    if (!user.hasPermission(category, endpoint)) {
         res.writeHead(401, { 'Content-Type': 'application/json' });
         const data = {
             code: 401,
