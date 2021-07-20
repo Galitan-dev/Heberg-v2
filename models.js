@@ -6,7 +6,6 @@ class User {
 
     static async find(username, password) {
         const doc = !!username && !!password ? await UserModel.findOne({ name: username, password: password }).exec() : null;
-        console.log(doc, username, password);
         return new User(doc);
     }
 
