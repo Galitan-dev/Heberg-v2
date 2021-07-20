@@ -31,14 +31,25 @@ app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "
 app.get("/api/:category/:endpoint", async (req, res) => {
     const category = req.params.category;
     const endpoint = req.params.endpoint;
-    const username = req.headers.username;
-    const password = req.headers.password;
+    const authorization = req.headers.authorization;
+    const authorizationType = authorization?.split(" ");
 
-    const user = await User.findOne({ name: username, password: password }).exec();
+    let username, password;
+    if (authorizationType == "Basic") [ username, password ] = 
+        Buffer.from(authorization.split(" "), "base64").toString().split(":");
 
-    console.log(user);
+    const user = !!username && !!password ? await User.findOne({ name: username, password: password }).exec() : undefined;
 
-    if (!user || !user.permissions.includes("*")) {
+    if (!!user) 
+        console.log(user.name, user.permissions);
+
+    const hasPermission = [ "basics", "user" ].includes(category) || (!!user && (
+        user.permissions.includes("*") ||
+        user.permissions.includes(category + ".*") ||
+        user.permissions.includes(category + "." + endpoint)
+    ));
+    
+    if (!hasPermission) {
         res.writeHead(401, { 'Content-Type': 'application/json' });
         const data = {
             code: 401,
