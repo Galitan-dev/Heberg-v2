@@ -26,11 +26,13 @@ app.use(async (req, res, next) => {
     console.log(req.method, req.url);
 
     const authorization = req.headers.authorization?.split(" ");
-    const authorizationType = authorization[0];
+    const authorizationType = authorization ? authorization[0] : null || "Public";
 
     let username, password;
     if (authorizationType == "Basic")
         [ username, password ] = Buffer.from(authorization[1], "base64").toString().split(":");
+    else if (authorizationType == "Public")
+        [ username, password ] = [ "public", "none" ]
 
     req.user = await User.find(username, password);
 
