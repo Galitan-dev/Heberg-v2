@@ -6,13 +6,12 @@ class User {
 
     static async find(username, password) {
         const doc = !!username && !!password ? await UserModel.findOne({ name: username, password: password }).exec() : null;
+        console.log(doc, username, password);
         return new User(doc);
     }
 
-    constructor(doc, password = "none") {
-        let name;
-        if (typeof doc === "string") { name = doc; doc = null; }
-        this.doc = doc || new UserModel({ name: name, password: password, permissions: [], access: [] });
+    constructor(doc) {
+        this.doc = doc || new UserModel({ name: "public", password: "none", permissions: [], access: [] });
         /** @type {string[]}  */
         this.permissions = this.doc.get('permissions');
 
