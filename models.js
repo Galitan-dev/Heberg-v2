@@ -14,7 +14,7 @@ class User {
         if (typeof doc === "string") { name = doc; doc = null; }
         this.doc = doc || new UserModel({ name: name, password: password, permissions: [], access: [] });
         /** @type {string[]}  */
-        this.permissions = doc.get('permissions');
+        this.permissions = this.doc.get('permissions');
 
         this.permissions.push("basics.*");
     }
