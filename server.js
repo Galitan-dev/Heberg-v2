@@ -44,6 +44,8 @@ app.get("/api/:category/:endpoint", async (req, res) => {
     /** @type {User} */
     const user = req.user;
 
+    console.log(user.name, user.permissions);
+
     if (!user.hasPermission(category, endpoint)) {
         res.writeHead(401, { 'Content-Type': 'application/json' });
         const data = {
