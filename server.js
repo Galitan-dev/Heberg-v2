@@ -25,7 +25,7 @@ db.once('open', async () => {
 app.use(async (req, res, next) => {
     console.log(req.method, req.url);
 
-    const authorization = req.headers.authorization?.split(".");
+    const authorization = req.headers.authorization?.split(" ");
     const authorizationType = authorization[0];
 
     let username, password;
