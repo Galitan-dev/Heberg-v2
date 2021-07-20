@@ -22,7 +22,7 @@ db.once('open', async () => {
     console.log("Connected!");
 });
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     console.log(req.method, req.url);
 
     const authorization = req.headers.authorization;
@@ -32,7 +32,7 @@ app.use((req, res, next) => {
     if (authorizationType == "Basic") [ username, password ] = 
         Buffer.from(authorization.split(" "), "base64").toString().split(":");
     
-    req.user = User.find(username, password);
+    req.user = await User.find(username, password);
 
     next();
 });

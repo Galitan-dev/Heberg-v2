@@ -4,7 +4,7 @@ const UserModel = mongoose.model("User", new mongoose.Schema({ name: String, per
 
 class User {
 
-    static find(username, password) {
+    static async find(username, password) {
         const doc = !!username && !!password ? await UserModel.findOne({ name: username, password: password }).exec() : null;
         return new User(doc);
     }
