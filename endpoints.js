@@ -6,6 +6,7 @@ const sslChecker = require('ssl-checker');
 /** @type {{[key: string]: category}} */
 const endpoints = {};
 const db = mongoose.connection;
+const ConnectionStates = [ "DISCONNECTED", "CONNECTED", "CONNECTING", "DISCONNECTING" ];
 
 endpoint("basics", "notfound", async (req, write) => {
     write("code", 404);
@@ -41,7 +42,7 @@ endpoint("basics", "status", async (req, write) => {
         });
     });
 
-    const mongodb = mongoose.ConnectionStates[db.readyState].toUpperCase();
+    const mongodb = ConnectionStates[db.readyState].toUpperCase();
 
     const interface = await new Promise(resolve => {
         http.get({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt" }, res => {
