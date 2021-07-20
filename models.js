@@ -17,6 +17,10 @@ class User {
         this.permissions.push("basics.*");
     }
 
+    get name() {
+        return this.doc.get('name');
+    }
+
     hasPermission(category, endpoint) {
         return this.permissions.includes("*") ||
             this.permissions.includes(category + ".*") ||
