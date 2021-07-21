@@ -34,7 +34,7 @@ app.use(async (req, res, next) => {
     /** @type {User} */
     const user = req.user = await User.find(username, password);
 
-    console.log(req.method, req.url, "From:", user.name, "With", user.permissions.join(",").replace(/\*/g, "all").replace(/,\s([^,]+)$/, ' and $1'), "permissions");
+    console.log(req.method, req.url, "From:", user.name, "With", user.permissions.join(", ").replace(/\*/g, "all").replace(/,\s([^,]+)$/, ' and $1'), "permissions");
     next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "js", "css" ] }));
