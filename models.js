@@ -14,7 +14,7 @@ class User {
         /** @type {string[]}  */
         this.permissions = this.doc.get('permissions');
 
-        this.permissions.push("basics.*");
+        this.permissions.push("basics.*", "!basics.status");
     }
 
     get name() {
@@ -22,9 +22,11 @@ class User {
     }
 
     hasPermission(category, endpoint) {
-        return this.permissions.includes("*") ||
-            this.permissions.includes(category + ".*") ||
-            this.permissions.includes(category + "." + endpoint);
+        return (this.permissions.includes("*") || 
+            this.permissions.includes(category + ".*") || 
+            this.permissions.includes(category + "." + endpoint)) && 
+            !this.permissions.includes("!" + category + ".*") &&
+            !this.permissions.includes("!" + category + "." + endpoint);
     }
 
 }
