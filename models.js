@@ -14,7 +14,8 @@ class User {
         /** @type {string[]}  */
         this.permissions = this.doc.get('permissions');
 
-        this.permissions.push("basics.*", "!basics.status");
+        this.permissions.push("basics.*");
+        if (this.name == "public") this.permissions.push("!basics.status");
     }
 
     get name() {
@@ -22,11 +23,11 @@ class User {
     }
 
     hasPermission(category, endpoint) {
-        return (this.permissions.includes("*") || 
-            this.permissions.includes(category + ".*") || 
-            this.permissions.includes(category + "." + endpoint)) && 
-            !this.permissions.includes("!" + category + ".*") &&
-            !this.permissions.includes("!" + category + "." + endpoint);
+        return this.permissions.includes("*") 
+        ||( this.permissions.includes(category + ".*")
+        ||  this.permissions.includes(category + "." + endpoint))
+        &&! this.permissions.includes("!" + category + ".*")
+        &&! this.permissions.includes("!" + category + "." + endpoint);
     }
 
 }
