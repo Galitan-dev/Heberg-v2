@@ -1,4 +1,0 @@
-#!/bin/bash
-
-cd ~
-bash heberg/deploy && bash heberg/logs

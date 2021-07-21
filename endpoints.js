@@ -13,6 +13,11 @@ endpoint("basics", "notfound", async (req, write) => {
     write("message", "Not Found");
 }, "Not found");
 
+endpoint("basics", "unauthorized", async (req, write) => {
+    write("code", 401);
+    write("message", "Unauthorized");
+}, "Unauthorized");
+
 endpoint("basics", "help", async (req, write) => {
     write("code", 200);
     const endpointsData = {};

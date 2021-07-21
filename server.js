@@ -23,7 +23,6 @@ db.once('open', async () => {
 });
 
 app.use(async (req, res, next) => {
-    console.log(req.method, req.url);
 
     const authorization = req.headers.authorization?.split(" ");
     const authorizationType = authorization ? authorization[0] : null || "Public";
@@ -31,11 +30,11 @@ app.use(async (req, res, next) => {
     let username, password;
     if (authorizationType == "Basic")
         [ username, password ] = Buffer.from(authorization[1], "base64").toString().split(":");
-    else if (authorizationType == "Public")
-        [ username, password ] = [ "public", "none" ]
 
-    req.user = await User.find(username, password);
+    /** @type {User} */
+    const user = req.user = await User.find(username, password);
 
+    console.log(req.method, req.url, "From:", user.name, "With", user.permissions.join(",").replace(/\*/g, "all").replace(/,\s([^,]+)$/, ' and $1'), "permissions");
     next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "js", "css" ] }));
@@ -46,19 +45,6 @@ app.get("/api/:category/:endpoint", async (req, res) => {
     /** @type {User} */
     const user = req.user;
 
-    console.log(user.name, user.permissions);
-
-    if (!user.hasPermission(category, endpoint)) {
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        const data = {
-            code: 401,
-            message: "Unauthorized"
-        }
-        res.write(JSON.stringify(data));
-        res.end();
-        return;
-    }
-
     const data = {
         code: 500
     }
@@ -66,8 +52,9 @@ app.get("/api/:category/:endpoint", async (req, res) => {
     /** @type {import('./endpoints').writeFunc} */
     const write = (key, value) => data[key] = value;
 
-    if (category in endpoints && endpoint in endpoints[category]) await endpoints[category][endpoint].execute(req, write);
-    else await endpoints.basics.notfound.execute(req, write);
+    if (!(category in endpoints && endpoint in endpoints[category])) await endpoints.basics.notfound.execute(req, write);
+    else if (!user.hasPermission(category, endpoint)) await endpoints.basics.unauthorized.execute(req, write);
+    else await endpoints[category][endpoint].execute(req, write);
 
     res.writeHead(data.code, { 'Content-Type': 'application/json' });
 
