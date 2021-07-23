@@ -97,8 +97,8 @@ endpoint("github", "createToken", async (req, write) => {
         return;
     }
 
-    const user = req.body.user.toLowerCase();
-    const token = Buffer.from(req.body.token, "base64").toString();
+    const user = req.body.user?.toLowerCase();
+    const token = req.body.token ? Buffer.from(req.body.token, "base64").toString() : null;
 
     if (!user || !token) {
         write("code", 400);
