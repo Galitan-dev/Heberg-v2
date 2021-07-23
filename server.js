@@ -3,6 +3,7 @@ const path = require('path');
 const socketIo = require('socket.io');
 const http = require('http');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 const endpoints = require('./endpoints');
 const { User } = require('./models');
@@ -12,6 +13,7 @@ const PORT = process.env.PORT || 200;
 const app = express();
 const server = http.createServer(app);
 const io = new socketIo.Server(server); //TODO: implement sockets interaction
+const jsonParser = bodyParser.json();
 
 console.log("Connecting to Mongo database...");
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }); 
@@ -39,7 +41,7 @@ app.use(async (req, res, next) => {
 });
 app.use(express.static(path.join(__dirname, 'public'), { extensions: [ "html", "js", "css" ] }));
 
-app.get("/api/:category/:endpoint", async (req, res) => {
+app.get("/api/:category/:endpoint", jsonParser,  async (req, res) => {
     const category = req.params.category;
     const endpoint = req.params.endpoint;
     /** @type {User} */

@@ -32,4 +32,9 @@ class User {
 
 }
 
+const TokenModel = mongoose.model("Token", new mongoose.Schema({ user: { type: String, lowercase: true }, value: String }))
+
+module.exports.UserModel = UserModel;
 module.exports.User = User;
+
+module.exports.TokenModel = TokenModel;

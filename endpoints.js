@@ -2,6 +2,7 @@ const https = require('https');
 const http = require('http');
 const mongoose = require('mongoose');
 const sslChecker = require('ssl-checker');
+const { TokenModel } = require('./models');
 
 /** @type {{[key: string]: category}} */
 const endpoints = {};
@@ -76,6 +77,59 @@ endpoint("basics", "status", async (req, write) => {
     write("domain", domain);
     write("ssl", ssl);
 }, "Get service status");
+
+endpoint("github", "listTokens", async (req, write) => {
+    write("code", 200);
+
+    const tokens = await TokenModel.find().exec();
+    const obj = {};
+    for (const token of tokens) {
+        obj[token.user] = token.value;
+    }
+
+    write("tokens", obj);
+}, "List available github tokens");
+
+endpoint("github", "createToken", async (req, write) => {
+    if (req.headers['content-type'] != "application/json" || !req.body) {
+        req.write("code", 400);
+        req.write("message", "Expected JSON body");
+        return;
+    }
+
+    const user = req.body.user.toLowerCase();
+    const token = Buffer.from(req.body.token, "base64").toString();
+
+    if (!user || !token) {
+        req.write("code", 400);
+        req.write("message", "Expected user and token in JSON body");
+        return;
+    }
+
+    if (await TokenModel.findOne({ user: user }).exec()) {
+        req.write("code", 422);
+        req.write("message", "This user already have a token");
+    }
+
+    const valid = await new Promise(resolve => {
+        https.get({ hostname: 'api.github.com', path: '/user', headers: { 'Authorization': `Bearer ${value}` } }, res => {
+            resolve(res.statusCode == 200);
+        }).on('error', err => {
+            console.log(err);
+            resolve(false);
+        });
+    });
+
+    if (!valid) {
+        req.write("code", 422);
+        req.wrap("message", "Invalid token");
+        return;
+    }
+
+    await TokenModel.create({ user: user, value: token }).exec();
+
+    req.write("code", 200);
+}, "Create a new github token");
 
 
 module.exports = endpoints;
