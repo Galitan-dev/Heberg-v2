@@ -133,7 +133,7 @@ endpoint("github", "createToken", async (req, write) => {
         return;
     }
 
-    await TokenModel.create({ user: user, value: token.toS }).exec();
+    await TokenModel.create({ user: user, value: token.toString() });
 
     write("code", 200);
 }, "Create a new github token");
