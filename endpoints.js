@@ -119,8 +119,7 @@ endpoint("github", "createToken", async (req, write) => {
     }
 
     const valid = await new Promise(resolve => {
-        https.get({ hostname: 'api.github.com', path: '/user', headers: { 'Authorization': `Bearer ${token.toString()}` } }, res => {
-            console.log(res.statusMessage);
+        https.get({ hostname: 'api.github.com', path: '/user', headers: { 'Authorization': `Bearer ${token.toString()}`, "User-Agent": "request" } }, res => {
             resolve(res.statusCode == 200);
         }).on('error', err => {
             console.log(err);
