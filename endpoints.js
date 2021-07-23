@@ -116,6 +116,7 @@ endpoint("github", "createToken", async (req, write) => {
     if (await TokenModel.findOne({ user: user }).exec()) {
         write("code", 422);
         write("message", "This user already have a token");
+        return;
     }
 
     const valid = await new Promise(resolve => {
