@@ -92,8 +92,8 @@ endpoint("github", "listTokens", async (req, write) => {
 
 endpoint("github", "createToken", async (req, write) => {
     if (req.headers['content-type'] != "application/json" || !req.body) {
-        req.write("code", 400);
-        req.write("message", "Expected JSON body");
+        write("code", 400);
+        write("message", "Expected JSON body");
         return;
     }
 
@@ -101,14 +101,14 @@ endpoint("github", "createToken", async (req, write) => {
     const token = Buffer.from(req.body.token, "base64").toString();
 
     if (!user || !token) {
-        req.write("code", 400);
-        req.write("message", "Expected user and token in JSON body");
+        write("code", 400);
+        write("message", "Expected user and token in JSON body");
         return;
     }
 
     if (await TokenModel.findOne({ user: user }).exec()) {
-        req.write("code", 422);
-        req.write("message", "This user already have a token");
+        write("code", 422);
+        write("message", "This user already have a token");
     }
 
     const valid = await new Promise(resolve => {
@@ -121,14 +121,14 @@ endpoint("github", "createToken", async (req, write) => {
     });
 
     if (!valid) {
-        req.write("code", 422);
-        req.wrap("message", "Invalid token");
+        write("code", 422);
+        write("message", "Invalid token");
         return;
     }
 
     await TokenModel.create({ user: user, value: token }).exec();
 
-    req.write("code", 200);
+    write("code", 200);
 }, "Create a new github token");
 
 
