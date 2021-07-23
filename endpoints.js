@@ -2,8 +2,7 @@ const https = require('https');
 const http = require('http');
 const mongoose = require('mongoose');
 const sslChecker = require('ssl-checker');
-const { TokenModel } = require('./models');
-const { assert } = require('console');
+const { TokenModel, Heberg } = require('./models');
 
 /** @type {{[key: string]: category}} */
 const endpoints = {};
@@ -40,14 +39,7 @@ endpoint("basics", "status", async (req, write) => {
 
     const api = "OK";
 
-    const socketIo = await new Promise(resolve => {
-        http.get({ hostname: "127.0.0.1", port: process.env.PORT || 200, path: "/testfile.txt" }, res => {
-            resolve(res.statusMessage);
-        }).on('error', err => {
-            console.log(err);
-            resolve("Unjoinable");
-        });
-    });
+    const docker = (await Heberg.ping()) ? "CONNECTED" : "DISCONNECTED"; 
 
     const mongodb = ConnectionStates[db.readyState].toUpperCase();
 
@@ -72,7 +64,7 @@ endpoint("basics", "status", async (req, write) => {
     const ssl = (await sslChecker("vps.galitan.tk")).valid ? "VALID" : "INVALID";
 
     write("api", api);
-    write("socketio", socketIo);
+    write("docker", docker);
     write("mongodb", mongodb);
     write("interface", interface);
     write("domain", domain);

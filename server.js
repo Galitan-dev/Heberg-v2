@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const socketIo = require('socket.io');
 const http = require('http');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -12,7 +11,6 @@ const PORT = process.env.PORT || 200;
 
 const app = express();
 const server = http.createServer(app);
-const io = new socketIo.Server(server); //TODO: implement sockets interaction
 const jsonParser = bodyParser.json();
 
 console.log("Connecting to Mongo database...");
