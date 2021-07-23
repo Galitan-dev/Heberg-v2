@@ -107,7 +107,7 @@ endpoint("github", "createToken", async (req, write) => {
         return;
     }
 
-    if (token.toString("base64") != token) {
+    if (token.toString("base64") != req.body.token) {
         write("code", 400);
         write("message", "Expected token to be base64 encoded");
         return;
