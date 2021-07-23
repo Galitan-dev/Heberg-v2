@@ -3,6 +3,7 @@ const http = require('http');
 const mongoose = require('mongoose');
 const sslChecker = require('ssl-checker');
 const { TokenModel } = require('./models');
+const { assert } = require('console');
 
 /** @type {{[key: string]: category}} */
 const endpoints = {};
@@ -98,12 +99,17 @@ endpoint("github", "createToken", async (req, write) => {
     }
 
     const user = req.body.user?.toLowerCase();
-    const token = req.body.token ? Buffer.from(req.body.token, "base64").toString() : null;
-    console.log(token);
+    const token = Buffer.from(req.body.token, "base64");
 
     if (!user || !token) {
         write("code", 400);
         write("message", "Expected user and token in JSON body");
+        return;
+    }
+
+    if (token.toString("base64") != token) {
+        write("code", 400);
+        write("message", "Expected token to be base64 encoded");
         return;
     }
 
@@ -113,7 +119,7 @@ endpoint("github", "createToken", async (req, write) => {
     }
 
     const valid = await new Promise(resolve => {
-        https.get({ hostname: 'api.github.com', path: '/user', headers: { 'Authorization': `Bearer ${token}` } }, res => {
+        https.get({ hostname: 'api.github.com', path: '/user', headers: { 'Authorization': `Bearer ${token.toString()}` } }, res => {
             resolve(res.statusCode == 200);
         }).on('error', err => {
             console.log(err);
@@ -127,7 +133,7 @@ endpoint("github", "createToken", async (req, write) => {
         return;
     }
 
-    await TokenModel.create({ user: user, value: token }).exec();
+    await TokenModel.create({ user: user, value: token.toS }).exec();
 
     write("code", 200);
 }, "Create a new github token");
