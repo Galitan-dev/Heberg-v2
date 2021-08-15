@@ -131,7 +131,7 @@ endpoint("github", "createToken", async (req, write) => {
     write("code", 200);
 }, "Create a new github token");
 
-endpoint("heberg", "list", (req, write) => {
+endpoint("heberg", "list", async (req, write) => {
     const hebergs = await HebergModel.find().exec();
     
     write("hebergs", hebergs.map(h => h.get('name')));
