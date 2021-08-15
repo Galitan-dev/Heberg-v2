@@ -152,6 +152,7 @@ endpoint("heberg", "create", async (req, write) => {
     if (!name || !repoUser || !repoName) {
         write("code", 400);
         write("message", "Missing fields");
+        return;
     }
 
     const heberg = Heberg.create({
