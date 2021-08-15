@@ -138,6 +138,33 @@ endpoint("heberg", "list", async (req, write) => {
     write("code", 200);
 }, "List hebergs");
 
+endpoint("heberg", "create", async (req, write) => {
+    if (req.headers['content-type'] != "application/json" || !req.body) {
+        write("code", 400);
+        write("message", "Expected JSON body");
+        return;
+    }
+
+    const name = req.body.name?.toLowerCase();
+    const repoUser = req.body.repository?.user?.toLowerCase();
+    const repoName = req.body.repository?.name?.toLowerCase();
+
+    const heberg = Heberg.create({
+        name: name,
+        repository: {
+            user: repoUser,
+            name: repoName
+        },
+        env: {},
+        directory: "~/hosts/" + name,
+        containerId: null,
+        autoDeploy: false
+    });
+
+    write("code", 200);
+
+}, "Create a new heberg");
+
 module.exports = endpoints;
 
 /**

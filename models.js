@@ -43,10 +43,6 @@ const HebergModel = mongoose.model("Heberg", new mongoose.Schema({
         user: lowerString, 
         name: lowerString
     },
-    scripts: {
-        start: { type: String, default: "node index.js" },
-        install: { type: String, default: "yarn install --production" }
-    },
     env: {
         type: Map,
         of: String
