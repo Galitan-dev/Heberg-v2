@@ -2,7 +2,7 @@ const https = require('https');
 const http = require('http');
 const mongoose = require('mongoose');
 const sslChecker = require('ssl-checker');
-const { TokenModel, Heberg } = require('./models');
+const { TokenModel, Heberg, HebergModel } = require('./models');
 
 /** @type {{[key: string]: category}} */
 const endpoints = {};
@@ -131,6 +131,12 @@ endpoint("github", "createToken", async (req, write) => {
     write("code", 200);
 }, "Create a new github token");
 
+endpoint("heberg", "list", (req, write) => {
+    const hebergs = await HebergModel.find().exec();
+    
+    write("hebergs", hebergs.map(h => h.get('name')));
+    write("code", 200);
+}, "List hebergs");
 
 module.exports = endpoints;
 

@@ -57,10 +57,6 @@ const HebergModel = mongoose.model("Heberg", new mongoose.Schema({
 }));
 
 class Heberg {
-
-    /** @type {Map<String, Heberg>} */
-    static cache = new Map();
-
     static docker = new Docker({ socketPath: "/var/run/docker.sock", version: "v1.41" });
 
     static async ping() {
@@ -68,7 +64,6 @@ class Heberg {
     }
 
     static async get(name) {
-        if (Heberg.cache.has(name)) return Heberg.cache.get(name);
         return new Heberg(await HebergModel.find({ name: name }).exec());
     }
 
@@ -80,8 +75,6 @@ class Heberg {
     constructor(doc) {
         /** @type {mongoose.Document} */
         this.doc = doc;
-
-        Heberg.cache.set(this.name, this);
     }
 
     get name() {
@@ -103,28 +96,6 @@ class Heberg {
         const split = full.split("/");
         this.doc.set("repository.user", split[0]);
         this.doc.set("repository.name", split[1]);
-        return this.doc.save();
-    }
-
-    /** @returns {String} */
-    get startScript() {
-        return this.doc.get("scripts.start");
-    }
-
-    /** @param {String} script @returns {Promise<void>} */
-    set startScript(script) {
-        this.doc.set("scripts.start", script);
-        return this.doc.save();
-    }
-
-    /** @returns {String} */
-    get installScript() {
-        return this.doc.get("scripts.install");
-    }
-
-    /** @param {String} script @returns {Promise<void>} */
-    set installScript(script) {
-        this.doc.set("scripts.install", script);
         return this.doc.save();
     }
 
