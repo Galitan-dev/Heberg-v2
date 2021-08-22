@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NAME=$1
-ID=$(mongo heberg --eval "db.hebergs.findOne({name:'$NAME'}).containerId" --quiet)
+CWD=$(dirname "$(readlink -f "$0")")
 
-docker stop $ID
-docker run -d $NAME:latest
+$CWD/start.sh $NAME
+$CWD/stop.sh $NAME
