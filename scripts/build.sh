@@ -1,3 +1,5 @@
 #!/bin/bash
 
-docker build -t $1:latest $HOME/hosts/$1
+NAME=$1
+
+docker build -t $NAME:latest $HOME/hosts/$NAME

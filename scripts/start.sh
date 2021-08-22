@@ -1,3 +1,5 @@
 #!/bin/bash
 
-docker run -d $1:latest
+NAME=$1
+
+docker run -d $NAME:latest

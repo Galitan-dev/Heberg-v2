@@ -1,4 +1,7 @@
 #!/bin/bash
 
-docker stop $2
-docker run -d $1:latest
+NAME=$1
+ID=$(mongo heberg --eval "db.hebergs.findOne({name:'$NAME'}).containerId" --quiet)
+
+docker stop $ID
+docker run -d $NAME:latest

@@ -196,8 +196,6 @@ endpoint("heberg", "config", async (req, write) => {
         return;
     }
 
-    console.log(heberg);
-
     switch (key) {
         case "repository":
             heberg.repository = value;

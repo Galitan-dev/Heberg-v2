@@ -1,3 +1,5 @@
 #!/bin/bash
 
-tail -f $HOME/hosts/$1/out.log
+NAME=$1
+
+tail -f $HOME/hosts/$NAME/out.log
