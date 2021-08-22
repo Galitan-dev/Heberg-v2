@@ -17,8 +17,7 @@ git clone https://galitan-dev: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@github.co
 echo "Downloaded!"
 
 echo "Preparing scripts..."
-cd ~/heberg/app/scripts
-chmod u+x $(ls)
+chmod -R u+x ~/heberg/app/scripts
 echo "Scripts are ready!"
 
 echo "Installing dependencies..."
