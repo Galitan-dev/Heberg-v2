@@ -155,7 +155,7 @@ endpoint("heberg", "create", async (req, write) => {
         return;
     }
 
-    const heberg = Heberg.create({
+    Heberg.create({
         name: name,
         repository: {
             user: repoUser,
@@ -170,6 +170,91 @@ endpoint("heberg", "create", async (req, write) => {
     write("code", 200);
 
 }, "Create a new heberg");
+
+endpoint("heberg", "config", async (req, write) => {
+    if (req.headers['content-type'] != "application/json" || !req.body) {
+        write("code", 400);
+        write("message", "Expected JSON body");
+        return;
+    }
+
+    const name = req.body.name?.toLowerCase();
+    const key = req.body.key;
+    const value = req.body.value;
+
+    if (!name || !key || !value) {
+        write("code", 400);
+        write("message", "Missing fields");
+        return;
+    }
+
+    const heberg = await Heberg.get(name);
+
+    if (!heberg) {
+        write("code", 404);
+        write("message", "Heberg not found");
+        return;
+    }
+
+    switch (key) {
+        case "repository":
+            heberg.repository = value;
+            break;
+        case "autoDeploy":
+            heberg.autoDeploy = value;
+            break;
+        default:
+            write("code", "401");
+            write("message", "Unsupported field: " + key);
+            return;
+    }
+
+    write("code", 200);
+
+}, "Config a heberg");
+
+endpoint("heberg", "config", async (req, write) => {
+    if (req.headers['content-type'] != "application/json" || !req.body) {
+        write("code", 400);
+        write("message", "Expected JSON body");
+        return;
+    }
+
+    const name = req.body.name?.toLowerCase();
+    const action = req.body.action;
+    const key = req.body.key;
+    const value = req.body.value;
+
+    if (!name || !action || !key) {
+        write("code", 400);
+        write("message", "Missing fields");
+        return;
+    }
+
+    const heberg = await Heberg.get(name);
+
+    if (!heberg) {
+        write("code", 404);
+        write("message", "Heberg not found");
+        return;
+    }
+
+    switch (action) {
+        case "put":
+            heberg.setEnvironmentVariable(key, value || undefined);
+            break;
+        case "delete":
+            heberg.removeEnvironmentVariable(key);
+            break;
+        default:
+            write("code", "401");
+            write("message", "Unsupported action: " + action);
+            return;
+    }
+
+    write("code", 200);
+
+}, "Manage environment variables");
 
 module.exports = endpoints;
 
