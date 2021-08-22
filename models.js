@@ -62,7 +62,8 @@ class Heberg {
     static async get(name) {
         const doc = await HebergModel.find({ name: name }).exec();
         if (!doc) return null;
-        return new Heberg();
+        console.log(doc)
+        return new Heberg(doc);
     }
 
     static async create(def) {
