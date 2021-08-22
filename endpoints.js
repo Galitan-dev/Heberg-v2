@@ -182,8 +182,6 @@ endpoint("heberg", "config", async (req, write) => {
     const key = req.body.key;
     const value = req.body.value;
 
-    console.log("hey");
-
     if (!name || !key || !value) {
         write("code", 400);
         write("message", "Missing fields");
@@ -215,7 +213,7 @@ endpoint("heberg", "config", async (req, write) => {
 
 }, "Config a heberg");
 
-endpoint("heberg", "config", async (req, write) => {
+endpoint("heberg", "env", async (req, write) => {
     if (req.headers['content-type'] != "application/json" || !req.body) {
         write("code", 400);
         write("message", "Expected JSON body");
