@@ -16,6 +16,11 @@ echo "Downloading code from github..."
 git clone https://galitan-dev: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@github.com/galitan-dev/heberg-v2 ~/heberg/app
 echo "Downloaded!"
 
+echo "Preparing scripts..."
+cd ~/heberg/app/scripts
+chmod u+x $(ls)
+echo "Scripts are ready!"
+
 echo "Installing dependencies..."
 cd ~/heberg/app
 yarn install --production
