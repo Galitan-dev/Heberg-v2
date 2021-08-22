@@ -182,7 +182,7 @@ endpoint("heberg", "config", async (req, write) => {
     const key = req.body.key;
     const value = req.body.value;
 
-    console.log(req.body);
+    console.log("hey");
 
     if (!name || !key || !value) {
         write("code", 400);
