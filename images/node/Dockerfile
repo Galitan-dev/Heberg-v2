@@ -4,7 +4,6 @@ LABEL Version="1.0"
 ARG name
 RUN mkdir /$name
 WORKDIR /$name
-VOLUME /$name
 ENV PORT=8080
 EXPOSE 8080
 CMD [ "./launch.sh" ]
