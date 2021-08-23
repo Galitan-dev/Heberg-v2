@@ -17,6 +17,11 @@
     "type": "git",
     "url": "git+https://github.com/Galitan-dev/Heberg-v2.git"
   },
+  "env": {
+    "PORT": "4000",
+    "token": "heyyiyge",
+    "bidule": "machin"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

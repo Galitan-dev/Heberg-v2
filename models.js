@@ -43,10 +43,6 @@ const HebergModel = mongoose.model("Heberg", new mongoose.Schema({
         user: lowerString, 
         name: lowerString
     },
-    env: {
-        type: Map,
-        of: String
-    },
     directory: String,
     containerId: { type: String },
     autoDeploy: { type: Boolean, default: false }
@@ -95,39 +91,6 @@ class Heberg {
         this.doc.set("repository.user", split[0]);
         this.doc.set("repository.name", split[1]);
         return this.doc.save();
-    }
-
-    /** @returns {Map<String, String>} */
-    get env() {
-        return this.doc.get("env");
-    }
-
-    /** @param {Map<String, String>} env @returns {Promise<void>} */
-    set env(env) {
-        this.doc.set("env", env);
-        return this.doc.save();
-    }
-
-    /**
-     * @param {String} key 
-     * @param {String} value
-     * @returns {Promise<void>}
-     */
-    setEnvironmentVariable(key, value) {
-        return this.env = this.env.set(key, value);
-    }
-
-    /** @param {String} key @returns {Promise<void>} */
-    removeEnvironmentVariable(key) {
-        return this.env = this.env.remove(key);
-    }
-
-    /**
-     * @param {String} key 
-     * @returns {String}
-     */
-    getEnvironmentVariable(key) {
-        return this.env.get(key);
     }
 
     /** @param {boolean} autoDeploy @returns {Promise<void>} */
