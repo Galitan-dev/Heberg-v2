@@ -6,4 +6,5 @@ WORKDIR $path
 VOLUME $path
 ENV PORT=8080
 EXPOSE 8080
+RUN touch "it-works.test"
 CMD [ "./launch.sh" ]
