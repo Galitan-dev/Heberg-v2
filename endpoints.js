@@ -5,6 +5,7 @@ const sslChecker = require('ssl-checker');
 const { TokenModel, Heberg, HebergModel } = require('./models');
 const fs = require('fs-extra');
 const { exec } = require('child_process')
+const homedir = require('os').homedir();
 
 /** @type {{[key: string]: category}} */
 const endpoints = {};
@@ -168,7 +169,7 @@ endpoint("heberg", "create", async (req, write) => {
     }
     Heberg.create(doc);
 
-    fs.copySync("~/heberg/app/images/node", "~/hosts/" + name);
+    fs.copySync(homedir + "/heberg/app/images/node", homedir + "/hosts/" + name);
     call("build", name);
 
     write("code", 200);
