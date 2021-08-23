@@ -7,6 +7,7 @@ USER=$(jq -r .repository.user <<< $HEBERG)
 TOKEN=$(mongo heberg --eval "db.tokens.findOne({user:'$USER'}).value" --quiet)
 REPOSITORY="$USER/$(jq -r .repository.name <<< $HEBERG)"
 
+rm -fr $HOME/hosts/$NAME/app
 git clone "https://$USER:$TOKEN@github.com/$REPOSITORY" $HOME/hosts/$NAME/app
 
 if [ "$ID" == "null" ]; then

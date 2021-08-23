@@ -6,4 +6,7 @@ RUN mkdir /$name
 WORKDIR /$name
 ENV PORT=8080
 EXPOSE 8080
-CMD [ "./launch.sh" ]
+RUN ["apk", "add", "jq"]
+RUN ["chmod", "+x" "./launch.sh"]
+RUN ["ls", "-al"]
+ENTRYPOINT ["./launch.sh"]
