@@ -1,4 +1,4 @@
-#!/bin/sg
+#!/bin/sh
 
 STDOUT="/run/stdout.log"
 STDERR="/run/stderr.log"
