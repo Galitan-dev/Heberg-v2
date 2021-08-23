@@ -4,7 +4,7 @@ LABEL Version="1.0"
 ARG name
 USER root
 RUN ["apk", "add", "jq"]
-USER node
 COPY ./deploy.sh /run
-RUN ["chmod", "+x", "/run/deploy.sh"]
+RUN ["chmod", "755", "/run/deploy.sh"]
+USER node
 ENTRYPOINT ["/run/deploy.sh"]
