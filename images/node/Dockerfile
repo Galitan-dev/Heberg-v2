@@ -6,3 +6,4 @@ WORKDIR $path
 VOLUME $path
 ENV PORT=8080
 EXPOSE 8080
+CMD [ "./launch.sh" ]
