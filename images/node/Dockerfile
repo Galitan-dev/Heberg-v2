@@ -5,7 +5,6 @@ ARG name
 USER root
 RUN ["apk", "add", "jq"]
 USER node
-WORKDIR /home/node
-COPY "/home/ethan/hosts/$name/deploy.sh" .
-RUN ["chmod", "+x", "./deploy.sh"]
-ENTRYPOINT ["./deploy.sh"]
+COPY ./deploy.sh /run
+RUN ["chmod", "+x", "/run/deploy.sh"]
+ENTRYPOINT ["/run/deploy.sh"]
