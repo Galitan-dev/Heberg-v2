@@ -7,6 +7,8 @@ exec > "stdout.log" 2> "stderr.log"
 
 eval "$(jq -r '.env | keys[] as $k | "export \($k)=\(.[$k]) &&"' package.json) cd ."
 
+cd ./app
+
 yarn install --production
 npm start
 

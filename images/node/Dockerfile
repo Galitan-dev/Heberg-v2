@@ -1,10 +1,10 @@
 FROM node:16-alpine
 LABEL Name="heberg-node"
 LABEL Version="1.0"
-ARG path
-WORKDIR $path
-VOLUME $path
+ARG name
+RUN mkdir /$name
+WORKDIR /$name
+VOLUME /$name
 ENV PORT=8080
 EXPOSE 8080
-RUN touch "it-works.test"
 CMD [ "./launch.sh" ]
