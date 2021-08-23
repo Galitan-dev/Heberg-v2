@@ -3,6 +3,8 @@ const http = require('http');
 const mongoose = require('mongoose');
 const sslChecker = require('ssl-checker');
 const { TokenModel, Heberg, HebergModel } = require('./models');
+const fs = require('fs-extra');
+const { exec } = require('child_process')
 
 /** @type {{[key: string]: category}} */
 const endpoints = {};
@@ -161,15 +163,13 @@ endpoint("heberg", "create", async (req, write) => {
             user: repoUser,
             name: repoName
         },
-        env: {},
-        directory: "~/hosts/" + name,
         containerId: null,
         autoDeploy: false
     }
-
-
-
     Heberg.create(doc);
+
+    fs.copySync("~/heberg/app/images/node", "~/hosts/" + name);
+    call("build", name);
 
     write("code", 200);
 
@@ -237,6 +237,14 @@ function endpoint(category, name, execute, description) {
     if (!(category in endpoints)) endpoints[category] = { name: category };
     endpoints[category][name] = endpoint;
 }
+
+const call = (script, name) => new Promise((resolve, reject) => {
+    exec("bash ~/heberg/app/scripts/" + script + ".sh " + name, (err, stdout, stderr) => {
+        if (err) reject(err);
+        else if (stderr) reject(stderr);
+        else resolve(stdout);
+    });
+});
 
 /**
  * @typedef endpoint
