@@ -5,7 +5,7 @@ ID=$(mongo heberg --eval "db.hebergs.findOne({name:'$NAME'}).containerId" --quie
 
 if [ "$ID" == "null" ]; then
     ID=$(docker run -d heberg-node)
-    $(mongo heberg --eval "db.hebergs.updateOne({name:'$NAME'},{\$set:{containerId:'$ID'}})" --quiet)
+    mongo heberg --eval "db.hebergs.updateOne({name:'$NAME'},{\$set:{containerId:'$ID'}})" --quiet
 else
     docker start $ID
 fi
