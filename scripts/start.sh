@@ -1,7 +1,13 @@
 #!/bin/bash
 
 NAME=$1
-ID=$(mongo heberg --eval "db.hebergs.findOne({name:'$NAME'}).containerId" --quiet)
+HEBERG=$(mongo heberg --eval "JSON.stringify(db.hebergs.findOne({name:'$NAME'}))" --quiet)
+ID=$(jq -r .containerId <<< $HEBERG)
+USER=$(jq -r .repository.user <<< $HEBERG)
+TOKEN=$(mongo heberg --eval "db.tokens.findOne({user:'$USER'}).value" --quiet)
+REPOSITORY="$USER/$(jq -r .repository.name <<< $HEBERG)"
+
+git clone "https://$USER:$TOKEN@github.com/$REPOSITORY" $HOME/hosts/$NAME/app
 
 if [ "$ID" == "null" ]; then
     ID=$(docker run -d -v $HOME/hosts/$NAME:/$NAME $NAME:latest)
