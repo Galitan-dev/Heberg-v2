@@ -1,7 +1,7 @@
 #!/bin/bash
 
-STDOUT="$HOME/stdout.log"
-STDERR="$HOME/stderr.log"
+STDOUT="/run/stdout.log"
+STDERR="/run/stderr.log"
 
 rm "$STDOUT" && touch "$STDOUT"
 rm "$STDERR" && touch "$STDERR"
