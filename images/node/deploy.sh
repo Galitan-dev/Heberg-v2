@@ -1,8 +1,8 @@
 #!/bin/bash
 
-rm sysout.log syserr.log
-touch stdout.log
-touch stderr.log
+rm $HOME/stdout.log $HOME/stderr.log
+touch $HOME/stdout.log
+touch $HOME/stderr.log
 exec > "stdout.log" 2> "stderr.log"
 
 eval "$(jq -r '.env | keys[] as $k | "export \($k)=\(.[$k]) &&"' package.json) cd ."

@@ -11,7 +11,7 @@ rm -fr $HOME/hosts/$NAME/app
 git clone "https://$USER:$TOKEN@github.com/$REPOSITORY" $HOME/hosts/$NAME/app
 
 if [ "$ID" == "null" ]; then
-    ID=$(docker run -d -v $HOME/hosts/$NAME:/$NAME $NAME:latest)
+    ID=$(docker run -d -v $HOME/hosts/$NAME:/home/node $NAME:latest)
     mongo heberg --eval "db.hebergs.updateOne({name:'$NAME'},{\$set:{containerId:'$ID'}})" --quiet
 else
     docker start $ID
