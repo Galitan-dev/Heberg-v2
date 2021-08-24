@@ -1,14 +1,11 @@
 #!/bin/sh
 
-STDOUT="/run/stdout.log"
-STDERR="/run/stderr.log"
+LOGS_FILE="/run/out.log"
 
-rm "$STDOUT" && touch "$STDOUT"
-rm "$STDERR" && touch "$STDERR"
-exec > "$STDOUT" 2> "$STDERR"
+rm "$LOGS_FILE" && touch "$LOGS_FILE"
+exec > "$LOGS_FILE" 2>&1
 
-
-cd ./app
+cd /run/app
 
 eval "$(jq -r '.env | keys[] as $k | "export \($k)=\(.[$k]) &&"' package.json) cd ."
 
