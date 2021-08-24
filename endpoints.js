@@ -327,8 +327,8 @@ function endpoint(category, name, execute, description) {
     endpoints[category][name] = endpoint;
 }
 
-const call = (script, name) => new Promise((resolve, reject) => {
-    exec("bash ~/heberg/app/scripts/" + script + ".sh " + name, (err, stdout, stderr) => {
+const call = (script, ...args) => new Promise((resolve, reject) => {
+    exec("bash ~/heberg/app/scripts/" + script + ".sh " + args.join(" "), (err, stdout, stderr) => {
         if (err) reject(err);
         else if (stderr) reject(stderr);
         else resolve(stdout);
