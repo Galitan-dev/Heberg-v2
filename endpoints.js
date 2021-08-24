@@ -236,6 +236,8 @@ endpoint("console", "stop", async (req, write) => {
     }
 
     call("stop", name);
+
+    write("code", 200);
 }, "Stop a heberg");
 
 endpoint("console", "start", async (req, write) => {
@@ -256,6 +258,8 @@ endpoint("console", "start", async (req, write) => {
     }
 
     call("start", name);
+
+    write("code", 200);
 }, "Start a heberg");
 
 endpoint("console", "restart", async (req, write) => {
@@ -276,6 +280,8 @@ endpoint("console", "restart", async (req, write) => {
     }
 
     call("restart", name);
+
+    write("code", 200);
 }, "Restart a heberg");
 
 endpoint("console", "rebuild", async (req, write) => {
@@ -296,6 +302,8 @@ endpoint("console", "rebuild", async (req, write) => {
     }
 
     call("rebuild", name);
+
+    write("code", 200);
 }, "Rebuild a heberg");
 
 module.exports = endpoints;
