@@ -218,27 +218,7 @@ endpoint("heberg", "config", async (req, write) => {
 
 }, "Config a heberg");
 
-endpoint("console", "start", (req, write) => {
-    if (req.headers['content-type'] != "application/json" || !req.body) {
-        write("code", 400);
-        write("message", "Expected JSON body");
-        return;
-    }
-
-    const name = req.body.name?.toLowerCase();
-
-    const heberg = await Heberg.get(name);
-
-    if (!heberg) {
-        write("code", 404);
-        write("message", "Heberg not found");
-        return;
-    }
-
-    call("start", name);
-}, "Start a heberg");
-
-endpoint("console", "stop", (req, write) => {
+endpoint("console", "stop", aysnc (req, write) => {
     if (req.headers['content-type'] != "application/json" || !req.body) {
         write("code", 400);
         write("message", "Expected JSON body");
@@ -258,7 +238,7 @@ endpoint("console", "stop", (req, write) => {
     call("stop", name);
 }, "Stop a heberg");
 
-endpoint("console", "start", (req, write) => {
+endpoint("console", "start", aysnc (req, write) => {
     if (req.headers['content-type'] != "application/json" || !req.body) {
         write("code", 400);
         write("message", "Expected JSON body");
@@ -278,7 +258,7 @@ endpoint("console", "start", (req, write) => {
     call("start", name);
 }, "Start a heberg");
 
-endpoint("console", "restart", (req, write) => {
+endpoint("console", "restart", aysnc (req, write) => {
     if (req.headers['content-type'] != "application/json" || !req.body) {
         write("code", 400);
         write("message", "Expected JSON body");
@@ -298,7 +278,7 @@ endpoint("console", "restart", (req, write) => {
     call("restart", name);
 }, "Restart a heberg");
 
-endpoint("console", "rebuild", (req, write) => {
+endpoint("console", "rebuild", aysnc (req, write) => {
     if (req.headers['content-type'] != "application/json" || !req.body) {
         write("code", 400);
         write("message", "Expected JSON body");
