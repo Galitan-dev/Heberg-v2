@@ -7,7 +7,7 @@ exec > "$LOGS_FILE" 2>&1
 
 cd /run/app
 
-eval "$(jq -r '.env | keys[] as $k | "export \($k)=\(.[$k]) &&"' package.json) cd ."
+eval "$(jq -r '.env | keys[] as $k | "export \"\($k)=\(.[$k])\" &&"' package.json) cd ."
 
 yarn install --production
 npm start
